@@ -124,9 +124,82 @@ server.js에 추가
 import http from "http";
 import WebSocket from "ws";
 
+const server = http.createServer(app);
+const wss = new WebSocket.Server({server});
+
+server.listen(3000, handleListen);
+
 
 서버 실행하기
 >npm run dev
 
 http 서버 : 사용자에게 뷰 엔진을 이용해 만든 뷰, 정적 파일, 리다이렉션 제공
 웹소켓 서버 : 실시간 채팅 가능
+
+html
+<button id="btn">안녕</button>
+javascript
+  const btn = document.getElementbyId("btn");
+  function onClick(){
+    console.log("click");
+  }
+  btn.addEventListener("click", onClick);
+
+웹 소켓 이벤트
+close : 서버가 닫혔을 때 발생
+connection : 서버와 사용자 간의 연결이 성립되었을 때 발생
+error : 연결되어 있는 서버에서 오류가 생겼을 때 발생
+headers : 서버의 응답 헤더가 소켓에 기록되기 전에 발생
+listening : 연결되어 있는 서버가 바인딩 되었을 때 발생
+
+웹소켓 이벤트 핸들링하기
+server.js 에 추가
+wss.on("connection", (socket)=>{
+    console.log("브라우저와 연결되었다요!");
+    socket.send("안녕?");
+});
+
+app.js에 추가
+const socket = new WebSocket(`ws://${window.location.host}`);
+
+socket.addEventListener("open", ()=>{
+    console.log('서버와 연결되었다.');
+})
+
+socket.addEventListener("message", (message)=>{
+    console.log('방금 받은 메시지 : ', message.data);
+})
+
+socket.addEventListener("close", ()=>{
+    console.log('서버와 연결이 종료되었습니다.');
+})
+
+
+server.js
+wss.on("connection", (socket)=>{
+    console.log("브라우저와 연결되었다요!");
+    socket.on("close", ()=> console.log("서버->서버와 연결이 끊겼네요 ㅠ"));
+    socket.on("message",(message)=>{
+        console.log(`${message}`);
+    })
+    socket.send("안녕?");
+});
+
+server.listen(3000, handleListen);
+
+
+app.js 시간차로 메시지 주고받기
+setTimeout(()=>{
+    socket.send("브라우저가 인사해본다 안녕?🎵",);
+},3000);
+
+
+실시간 채팅 완성하기
+1. 채팅 기능 준비하기
+2. 사용자간 채팅하기
+3. 닉네임 추가하기
+
+
+
+
+
