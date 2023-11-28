@@ -199,6 +199,26 @@ setTimeout(()=>{
 2. 사용자간 채팅하기
 3. 닉네임 추가하기
 
+server.js에
+wss.on("connection", (socket)=>{
+    sockets.push(socket);
+    console.log("브라우저와 연결되었다요!");
+    socket.on("close", ()=> console.log("서버->서버와 연결이 끊겼네요 ㅠ"));
+    socket.on("message",(message)=>{
+        // socket.send(`[서버] : ${message}`); 
+        sockets.forEach(aSocket => aSocket.send(`${message}`));
+    });
+});
+
+app.js에
+socket.addEventListener("message", (message)=>{
+    // console.log('방금 받은 메시지 : ', message.data);
+    const li = document.createElement("li");
+    li.innerText = message.data;
+    messageList.appendChild(li);
+})
+
+
 
 
 

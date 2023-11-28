@@ -17,6 +17,7 @@ const handleListen = () => console.log("연결중 http://localhost:3000");
 
 const server = http.createServer(app);
 const wss = new WebSocket.Server({server});
+const sockets = [];
 
 //연결 확인
 // function handleConnection(socket){
@@ -24,10 +25,12 @@ const wss = new WebSocket.Server({server});
 // }
 
 wss.on("connection", (socket)=>{
+    sockets.push(socket);
     console.log("브라우저와 연결되었다요!");
     socket.on("close", ()=> console.log("서버->서버와 연결이 끊겼네요 ㅠ"));
     socket.on("message",(message)=>{
-        socket.send(`[서버] : ${message}`);
+        // socket.send(`[서버] : ${message}`); 
+        sockets.forEach(aSocket => aSocket.send(`${message}`));
     });
 });
 
