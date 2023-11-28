@@ -98,3 +98,33 @@ nodemon.json에 코드 추가
 
 
 MVP.css 적용하기
+home.pug의 head에 추가
+link(rel="stylesheet", href="https://unpkg.com/mvp.css")
+
+
+웹 소켓을 이용한 실시간 기능 구현하기
+익명으로 채팅을 주고 받는다
+닉네임을 추가
+채팅룸의 컨셉을 잡는다.
+
+실시간 기능 구현 : 웹소켓
+실시간 채팅, 알람, 등등 ...
+
+      (요청)
+사용자  -->    서버
+       <-- 
+      (응답) 
+
+
+ws 패키지 설치하기
+>npm i ws
+
+server.js에 추가
+import http from "http";
+import WebSocket from "ws";
+
+
+서버 실행하기
+>npm run dev
+http 서버 : 사용자에게 뷰 엔진을 이용해 만든 뷰, 정적 파일, 리다이렉션 제공
+웹소켓 서버 : 실시간 채팅 가능
