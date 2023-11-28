@@ -26,11 +26,25 @@ const sockets = [];
 
 wss.on("connection", (socket)=>{
     sockets.push(socket);
+    socket["nickname"] = "익명";
     console.log("브라우저와 연결되었다요!");
     socket.on("close", ()=> console.log("서버->서버와 연결이 끊겼네요 ㅠ"));
-    socket.on("message",(message)=>{
+    // socket.on("message",(message)=>{
+    socket.on("message",(msg)=>{
+        const message = JSON.parse(msg);
+        // console.log(message.type, message.payload);
         // socket.send(`[서버] : ${message}`); 
-        sockets.forEach(aSocket => aSocket.send(`${message}`));
+        // sockets.forEach(aSocket => aSocket.send(`${message}`));
+        switch(message.type){
+            case "new_message" : 
+                // sockets.forEach(aSocket => aSocket.send(`${message.payload}`));
+                sockets.forEach(aSocket => aSocket.send(`[${socket.nickname}] ${message.payload}`));
+
+                break;
+            case "nickname" :
+                socket["nickname"] = message.payload;
+                break;
+        }
     });
 });
 
