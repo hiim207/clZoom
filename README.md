@@ -95,3 +95,6 @@ nodemon은 코드 변화를 감지해서 서버를 재시작해주는 기능이 
 public 폴더 내부의 코드가 변할 때는 서버가 재시작되지 않도록 작성
 nodemon.json에 코드 추가
 "ignore":["src/public/*"],
+
+
+MVP.css 적용하기
