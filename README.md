@@ -48,8 +48,16 @@ package.json에 명령어를 추가할 수 있도록 scrpit 키를 추가
 express 설치
 Node.js 환경에서 API 서버를 개발할 때 사용할 수 있는 웹 프레임워크
 
-터미널
+터미널에 아래 입력
 >npm i express
 
+public 폴더 : 
+페이지에 필요한 스크립트나 스타일시트를 보관
+src>public>js>app.js 생성
 
+pug 설치
+>npm i pug
+https://pugjs.org/api/getting-started.html
 
+views 폴더 생성하고 뷰 만들기
+src>views
