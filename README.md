@@ -61,3 +61,37 @@ https://pugjs.org/api/getting-started.html
 
 views 폴더 생성하고 뷰 만들기
 src>views
+
+view 보관
+src>views>homg.pug
+
+doctype html
+html(lan="en")
+    head 
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title clZoom
+    body 
+        h1 Welcome!
+        p Hi Judith
+
+        script(src="/public/js/app/js")
+        img(src="/public/img/1.jpg")
+
+server.js에 추가
+app.set("view engine", "pug");
+app.set("views", __dirname + "/views");
+
+app.use("/public", express.static(__dirname+"/public"));
+
+
+app.get("/", (req,res)=>res.render("home"));
+app.get("/*", (req,res)=>res.redirect("/"));
+
+
+nodemon 설정 추가
+nodemon은 코드 변화를 감지해서 서버를 재시작해주는 기능이 있다
+public 폴더 내부의 코드가 변할 때는 서버가 재시작되지 않도록 작성
+nodemon.json에 코드 추가
+"ignore":["src/public/*"],
