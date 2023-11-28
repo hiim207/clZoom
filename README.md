@@ -57,6 +57,7 @@ src>public>js>app.js 생성
 
 pug 설치
 >npm i pug
+
 https://pugjs.org/api/getting-started.html
 
 views 폴더 생성하고 뷰 만들기
@@ -126,5 +127,6 @@ import WebSocket from "ws";
 
 서버 실행하기
 >npm run dev
+
 http 서버 : 사용자에게 뷰 엔진을 이용해 만든 뷰, 정적 파일, 리다이렉션 제공
 웹소켓 서버 : 실시간 채팅 가능
