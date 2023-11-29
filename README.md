@@ -275,3 +275,23 @@ disconnecting
 사용자   <-   소켓         
 
 
+Admin panel 사용하기
+socket.io의 관리자용 서비스
+
+>npm i @socket.io/admin-ui
+
+server.js에 import
+import {Server} from "socket.io";
+import {instrument} from "@socket.io/admin-ui";
+
+const httpServer = http.createServer(app);
+const wsServer = new Server(httpServer, {
+   cors:{
+        origin : ["https://admin.socket.io"],
+        credentials : true
+   } 
+});
+
+instrument(wsServer,{
+    auth: false
+});
