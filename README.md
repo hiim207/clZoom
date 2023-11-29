@@ -218,8 +218,20 @@ socket.addEventListener("message", (message)=>{
     messageList.appendChild(li);
 })
 
+socket.io를 이용한 채팅룸 만들기
 
+1. socket.io 설치하기
+2. socket.io 다루기
+3. 채팅룸 만들기
+4. 채팅룸 안에서 메시지 교환하기
+5. 채팅룸 알람 보내기
 
+웹소켓을 활용하는 라이브러리
+socket.io가 웹소켓을 이용해 기능을 수행
 
+브라우저            |   ->      Node.js
+Node.js클라이언트   |  <-      서버
+
+>npm i socket.io
 
 

@@ -1,5 +1,6 @@
 import http from "http";
-import WebSocket from "ws";
+import SocketIO from "socket.io";
+// import WebSocket from "ws";
 import express from 'express';
 
 const app = express();
@@ -12,41 +13,41 @@ app.use("/public", express.static(__dirname+"/public"));
 app.get("/", (req,res)=>res.render("home"));
 app.get("/*", (req,res)=>res.redirect("/"));
 
-const handleListen = () => console.log("연결중 http://localhost:3000");
+// const handleListen = () => console.log("연결중 http://localhost:3000");
 //app.listen(3000, handleListen);
 
 const server = http.createServer(app);
-const wss = new WebSocket.Server({server});
-const sockets = [];
+// const wss = new WebSocket.Server({server});
+// const sockets = [];
 
 //연결 확인
 // function handleConnection(socket){
 //     console.log(socket);
 // }
 
-wss.on("connection", (socket)=>{
-    sockets.push(socket);
-    socket["nickname"] = "익명";
-    console.log("브라우저와 연결되었다요!");
-    socket.on("close", ()=> console.log("서버->서버와 연결이 끊겼네요 ㅠ"));
-    // socket.on("message",(message)=>{
-    socket.on("message",(msg)=>{
-        const message = JSON.parse(msg);
-        // console.log(message.type, message.payload);
-        // socket.send(`[서버] : ${message}`); 
-        // sockets.forEach(aSocket => aSocket.send(`${message}`));
-        switch(message.type){
-            case "new_message" : 
-                // sockets.forEach(aSocket => aSocket.send(`${message.payload}`));
-                sockets.forEach(aSocket => aSocket.send(`[${socket.nickname}] ${message.payload}`));
-
-                break;
-            case "nickname" :
-                socket["nickname"] = message.payload;
-                break;
-        }
-    });
-});
+// wss.on("connection", (socket)=>{
+//     sockets.push(socket);
+//     socket["nickname"] = "익명";
+//     console.log("브라우저와 연결되었다요!");
+//     socket.on("close", ()=> console.log("서버->서버와 연결이 끊겼네요 ㅠ"));
+//     // socket.on("message",(message)=>{
+//     socket.on("message",(msg)=>{
+//         const message = JSON.parse(msg);
+//         // console.log(message.type, message.payload);
+//         // socket.send(`[서버] : ${message}`); 
+//         // sockets.forEach(aSocket => aSocket.send(`${message}`));
+//         switch(message.type){
+//             case "new_message" : 
+//                 // sockets.forEach(aSocket => aSocket.send(`${message.payload}`));
+//                 sockets.forEach(aSocket => aSocket.send(`[${socket.nickname}] ${message.payload}`));
+//                 break;
+//             case "nickname" :
+//                 socket["nickname"] = message.payload;
+//                 break;
+//         }
+//     });
+// });
+const handleListen = () => console.log("listening on  http://www.judith.com:3000")
 
 server.listen(3000, handleListen);
 
