@@ -295,3 +295,7 @@ const wsServer = new Server(httpServer, {
 instrument(wsServer,{
     auth: false
 });
+
+관리자 페이지 들어가기
+시크릿모드 (컨트롤+쉬프트+n)
+https://admin.socket.io
