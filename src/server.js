@@ -13,10 +13,47 @@ app.use("/public", express.static(__dirname+"/public"));
 app.get("/", (req,res)=>res.render("home"));
 app.get("/*", (req,res)=>res.redirect("/"));
 
+const httpServer = http.createServer(app);
+const wsServer = SocketIO(httpServer);
+
+wsServer.on("connection", (socket)=>{
+    // console.log(socket);
+    // socket.on("enter_room", (roomName)=> console.log(roomName));
+    socket["nickname"] = "익명";
+
+    socket.onAny((event)=>{
+        console.log(wsServer.sockets.adapter);
+        console.log(`Socket Event :${event}`);
+    });
+
+    socket.on("enter_room", (roomName, done)=>{
+        done();
+        // console.log(roomName);
+        // console.log(socket.id);
+        // console.log(socket.rooms);
+        socket.join(roomName);
+        // console.log(socket.rooms);
+        socket.to(roomName).emit("welcome", socket.nickname);
+        // setTimeout(()=>{
+        //     done();
+        // }, 5000);
+    });
+    socket.on("disconnecting", ()=>{
+        socket.rooms.forEach(room => socket.to(room).emit("bye", socket.nickname));
+    });
+
+    socket.on("new_message", (msg, room, done)=>{
+        socket.to(room).emit("new_message", `${socket.nickname} : ${msg}`);
+        done();
+    });
+
+    socket.on("nickname", (nickname)=>(socket["nickname"]=nickname));
+});
+
 // const handleListen = () => console.log("연결중 http://localhost:3000");
 //app.listen(3000, handleListen);
 
-const server = http.createServer(app);
+// const server = http.createServer(app);
 // const wss = new WebSocket.Server({server});
 // const sockets = [];
 
@@ -49,7 +86,7 @@ const server = http.createServer(app);
 // });
 const handleListen = () => console.log("listening on  http://www.judith.com:3000")
 
-server.listen(3000, handleListen);
+httpServer.listen(3000, handleListen);
 
 
 

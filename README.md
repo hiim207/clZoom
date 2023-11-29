@@ -232,6 +232,46 @@ socket.io가 웹소켓을 이용해 기능을 수행
 브라우저            |   ->      Node.js
 Node.js클라이언트   |  <-      서버
 
+socket.io 설치
+
 >npm i socket.io
+
+server.js에 import
+import SocketIO from "socket.io";
+
+http://localhost:3000/socket.io/socket.io.js
+
+
+채팅룸 접속하기
+채팅룸과 관련된 소켓 기능
+https://socket.io/docs/v4/server-api/#socket
+
+채팅룸 안에서 메시지 교환하기
+to 메서드 설명 
+https://socket.io/docs/v3/server-api/#sockettoroom
+
+채팅룸 알람 보내기
+socket.io
+disconnecting
+예: 브라우저 창을 닫는다. 컴퓨터를 끈다. -> 채팅룸을 나가기 직전에 발생하는 이벤트
+
+
+채팅룸 완성하기
+1. 닉네임 추가하기
+2. 채팅룸 관리하기
+3. 사용자 수 표시하기
+4. Admin panel 사용하기
+
+채팅룸 관리하기
+
+           서버a
+사용자   <-   소켓              
+사용자   <-   소켓      <-  어댑터      
+사용자   <-   소켓              
+
+           서버b                        <-    DB
+사용자   <-   소켓              
+사용자   <-   소켓      <-  어댑터      
+사용자   <-   소켓         
 
 

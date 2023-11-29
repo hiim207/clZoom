@@ -1,52 +1,71 @@
-const nickForm = document.querySelector("#nick");
-const messageForm = document.querySelector("#message");
-const messageList = document.querySelector("ul");
+const socket = io()
 
-const socket = new WebSocket(`ws://${window.location.host}`);
+const welcome = document.getElementById("welcome");
+const form = welcome.querySelector("form");
+const room = document.getElementById("room");
 
-function makeMessage(type,payload){
-    const msg = {type,payload};
-    return JSON.stringify(msg);
-}
+room.hidden = true;
 
-socket.addEventListener("open", ()=>{
-    console.log('서버와 연결되었다.');
-})
+let roomName;
 
-socket.addEventListener("message", (message)=>{
-    // console.log('방금 받은 메시지 : ', message.data);
+function addMessage(message){
+    const ul = room.querySelector("ul");
     const li = document.createElement("li");
-    li.innerText = message.data;
-    messageList.appendChild(li);
-})
-
-socket.addEventListener("close", ()=>{
-    console.log('서버와 연결이 종료되었습니다.');
-})
-
-// setTimeout(()=>{
-//     socket.send("브라우저가 인사해본다 안녕?🎵",);
-// },3000);
-
-function handleSubmint(event){
-    event.preventDefault();
-    const input = messageForm.querySelector("input");
-    // socket.send(input.value);
-    socket.send(makeMessage("new_message", input.value));
-    input.value="";
+    li.innerText = message;
+    ul.appendChild(li);
 }
 
-function handleNickSubmint(event){
+function handleNicknameSubmit(event){
     event.preventDefault();
-    const input = nickForm.querySelector("input");
-    // socket.send(input.value);
-    // socket.send({
-    //     type:"nickname",
-    //     payload: input.value
-    // });
-    socket.send(makeMessage("nickname", input.value));
-    input.value="";
+    const input = room.querySelector("#name input");
+    const value = input.value;
+    socket.emit("nickname", value);
+    socket.nickname = value;
+    input.value= "";
 }
 
-messageForm.addEventListener("submit", handleSubmint);
-nickForm.addEventListener("submit", handleNickSubmint);
+function handleMessageSubmit(event){
+    event.preventDefault();
+    const input = room.querySelector("#msg input");
+    const value = input.value;
+    socket.emit("new_message", value, roomName, ()=>{
+        addMessage(`${socket.nickname}[Me] : ${value}`);
+    });
+    input.value= "";
+}
+
+function showRoom(){
+    welcome.hidden = true;
+    room.hidden = false;
+    const h3 = room.querySelector("h3");
+    h3.innerText = `✨ ${roomName}'s 공간에 오신걸 환영합니다~ 🎈`;
+
+    const msgForm = room.querySelector("#msg");
+    const nameForm = room.querySelector("#name");
+    msgForm.addEventListener("submit", handleMessageSubmit)
+    nameForm.addEventListener("submit", handleNicknameSubmit)
+}
+
+function handleRoomSubmit(event){
+    event.preventDefault();
+    const input = form.querySelector("input");
+    // socket.emit("enter_room", {payload : input.value});  
+    socket.emit("enter_room", input.value, showRoom);
+    roomName = input.value;
+    input.value = "";
+}
+
+form.addEventListener("submit", handleRoomSubmit);
+
+socket.on("welcome", (userNickname)=>{
+    addMessage(`🎊 ${userNickname} 입장!! `);
+});
+
+socket.on("bye", (userNickname)=>{
+    addMessage(`${userNickname} 퇴장 🖐`);
+});
+
+socket.on("new_message", (msg)=>{
+    addMessage(msg);
+})
+
